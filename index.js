@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
+const path = require('path');
 
 const routes = require('./server/routes');
 require('./server/database');
@@ -14,6 +15,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api', routes);
+
+// Server static files from React app
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/client/build/index.html`));
+  // res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+});
 
 // Keep app awake
 setInterval(() => {
