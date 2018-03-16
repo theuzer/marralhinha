@@ -39,8 +39,27 @@ const getGameWithPlayers = (req, res) => {
     });
 };
 
+const updateGame = (req, res) => {
+  const id = mongoose.Types.ObjectId(req.params.id.trim());
+
+  const isFinished = req.body.isFinished;
+
+  Game.findByIdAndUpdate(
+    id,
+    { isFinished },
+    { upsert: true },
+    (err) => {
+      if (err) {
+        res.send(err);
+      }
+      res.sendStatus(200);
+    }
+  );
+};
+
 module.exports = {
   createGame,
   getGame,
-  getGameWithPlayers
+  getGameWithPlayers,
+  updateGame
 };

@@ -49,6 +49,48 @@ const createPlayer = (req, res) => {
   });
 };
 
+const updatePlayerBall = (req, res) => {
+  const playerId = mongoose.Types.ObjectId(req.params.id.trim());
+  const ballNumber = parseInt(req.body.ball.number, 10);
+  const position = parseInt(req.body.ball.position, 10);
+  const inPlay = req.body.ball.inPlay;
+  const inMiddle = req.body.ball.inMiddle;
+  const inStore = req.body.ball.inStore;
+
+  Player.update(
+    { _id: playerId, balls: { $elemMatch: { number: ballNumber } } },
+    {
+      $set: {
+        'balls.$.inPlay': inPlay,
+        'balls.$.inMiddle': inMiddle,
+        'balls.$.inStore': inStore,
+        'balls.$.position': position
+      }
+    },
+    { upsert: true },
+    (err) => {
+      if (err) {
+        res.send(err);
+      }
+      res.sendStatus(200);
+    }
+  );
+};
+
+const getPlayer = (req, res) => {
+  const id = mongoose.Types.ObjectId(req.params.id.trim());
+
+  Player.findById(id).exec()
+    .then((player) => {
+      res.json(player);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
 module.exports = {
   createPlayer,
+  updatePlayerBall,
+  getPlayer,
 };
