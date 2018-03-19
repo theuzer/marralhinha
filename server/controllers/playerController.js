@@ -27,6 +27,7 @@ const createPlayer = (req, res) => {
   newPlayer.side = req.body.side;
   newPlayer.team = req.body.team;
   newPlayer.isAi = req.body.isAi;
+  newPlayer.cookie = req.body.cookie;
   newPlayer.game = gameId;
   newPlayer.balls = getNewBalls();
 

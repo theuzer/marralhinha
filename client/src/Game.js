@@ -4,6 +4,7 @@ import axios from 'axios';
 import AIGame from './components/AIGame';
 import SingleGame from './components/SingleGame';
 import DuoGame from './components/DuoGame';
+import Lobby from './components/Lobby';
 
 import constants from './constants';
 
@@ -11,15 +12,16 @@ class Game extends Component {
   constructor() {
     super();
     this.state = {
-      type: null,
+      game: null,
     };
   }
 
   componentWillMount() {
-    axios.get(`/api/game/${this.props.match.params.id}`)
+    axios.get(`/api/game/${this.props.match.params.id}/all`)
       .then((response) => {
+        console.log(response);
         this.setState({
-          type: response.data.type,
+          game: response.data,
         });
       })
       .catch((err) => {
@@ -28,24 +30,30 @@ class Game extends Component {
   }
 
   render() {
-    let gameType = null;
-    switch (this.state.type) {
-      case constants.gameType.vsAI:
-        gameType = (<AIGame />);
-        break;
-      case constants.gameType.oneVersusOne:
-        gameType = (<SingleGame />);
-        break;
-      case constants.gameType.twoVersusTwo:
-        gameType = (<DuoGame />);
-        break;
-      default:
-        gameType = null;
+    let component = null;
+    if (this.state.game) {
+      if (!this.state.game.isStarted) {
+        component = (<Lobby game={this.state.game} />);
+      } else {
+        switch (this.state.game.type) {
+          case constants.gameType.vsAI:
+            component = (<AIGame game={this.state.game} />);
+            break;
+          case constants.gameType.oneVersusOne:
+            component = (<SingleGame />);
+            break;
+          case constants.gameType.twoVersusTwo:
+            component = (<DuoGame />);
+            break;
+          default:
+            component = null;
+        }
+      }
     }
 
     return (
       <div className="App">
-        {gameType}
+        {component}
       </div>
     );
   }

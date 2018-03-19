@@ -7,6 +7,7 @@ const GameSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   players: [{ type: Schema.Types.ObjectId, ref: 'Player' }],
   isFinished: { type: Boolean, default: false },
+  isStarted: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('Game', GameSchema);

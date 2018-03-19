@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const PlayerSchema = new Schema({
   game: { type: Schema.Types.ObjectId, ref: 'Game' },
+  cookie: String,
   team: { type: Number, enum: [0, 1] },
   side: { type: Number, enum: [0, 1, 2, 3] },
   name: String,

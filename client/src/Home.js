@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import constants from './constants';
+import utils from './utils/index';
 
 class Home extends Component {
   constructor() {
     super();
     this.handleOnClick = this.handleOnClick.bind(this);
+  }
+
+  componentWillMount() {
+    if (!Cookies.get('session')) {
+      Cookies.set('session', utils.guid());
+    } else {
+      console.log(Cookies.get('session'));
+    }
   }
 
   handleOnClick(e, gameType) {

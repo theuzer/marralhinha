@@ -43,10 +43,11 @@ const updateGame = (req, res) => {
   const id = mongoose.Types.ObjectId(req.params.id.trim());
 
   const isFinished = req.body.isFinished;
+  const isStarted = req.body.isStarted;
 
   Game.findByIdAndUpdate(
     id,
-    { isFinished },
+    { isFinished, isStarted },
     { upsert: true },
     (err) => {
       if (err) {
